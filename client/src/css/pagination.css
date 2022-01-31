@@ -1,0 +1,56 @@
+
+.pagination { 
+    justify-content: center;
+    padding: 10px 5px 5px;
+}
+
+.pages {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.page {
+    cursor: pointer;
+    height: auto;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #f1c304;
+    color: #2b62aa;
+    font-size: 20px;
+    box-shadow: 0px 5px 8px 0px black;
+    transition: all 0.3s;
+}
+
+.page:hover {
+    background-color: #2b62aa;
+    color: #f1c304;
+    transition: width 2s, height 4s;
+    box-shadow:0px 2px 10px 5px #97B1BF;   
+}
+
+.page:after {
+    content: "";
+    background: #f1c40f;
+    display: block;
+    position: absolute;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+.page:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+.loading{
+    color: #f1c304;
+    font-size: 50px;
+    text-shadow: 8px 8px 0px #2b62aa, 10px 10px 0px #2b62aa;
+    letter-spacing: 7px;
+}
+
