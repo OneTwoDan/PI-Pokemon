@@ -18,19 +18,12 @@ export default function Card({ name, img, types }) {
           <h1 className="pokemon-name">{name}</h1>
           
           <div className="pokemon-type">
-            {types.map((type) => (
-              <div className="poketype" style={{backgroundColor: typeColors[type]}}>
-                <li className="type" key={type.id}>{`${type}`}</li>
+            {types.map((type, index) => (
+              <div key={index} className="poketype" style={{backgroundColor: typeColors[type]}}>
+                <span className="type" >{`${type}`}</span>
               </div>
             ))}
           </div>
-
-          {/*           <div className="pokemon-stats">
-            <p>Hp : 34</p>
-            <p>Attack: 35</p>
-            <p>Defense: 35</p>
-            <p>Speed: 35</p>
-          </div> */}
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default function Pagination({ pokemonPerPage, allPokemons, pagination }) 
   return (
     <div>
       {pages.length <= 1 ? (
-        <h1 className="loading">Loading...</h1>
+        <h1 className="loading">Loading...</h1> //corregir esto
       ) : (
         <nav className="pagination">
           <ul className="pages">
