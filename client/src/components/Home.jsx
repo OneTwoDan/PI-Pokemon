@@ -6,6 +6,7 @@ import {
   filterPokemonsByType,
   filterPokemonsByOrigin,
   orderByName,
+  orderByAttack,
 } from "../redux/actions/index";
 import { Link } from "react-router-dom";
 import Card from "./Card";
@@ -61,6 +62,14 @@ export default function Home() {
     dispatch(orderByName(e.target.value));
     setCurrentPage(1);
     setOrder(`Ordenado${e.target.value}`);
+    console.log(e);
+  }
+
+  function handleSortAttack(e) {
+    e.preventDefault();
+    dispatch(orderByAttack(e.target.value));
+    setCurrentPage(1);
+    setOrder(`Ordenado${e.target.value}`);
   }
 
   return (
@@ -101,9 +110,16 @@ export default function Home() {
           <div className="custom-select">
             <select onChange={(e) => handleSort(e)}>
               <option>- - Order - -</option>
-              <option value="Num">Number</option>
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
+            </select>
+          </div>
+
+          <div className="attack-filter">
+            <select onChange={(e) => handleSortAttack(e)}>
+              <option value="att">- - Attack - -</option>
+              <option value="high">Highest</option>
+              <option value="Low">Lowest</option>
             </select>
           </div>
 
@@ -111,7 +127,8 @@ export default function Home() {
             <select onChange={(e) => handleFilterStatus(e)}>
               {allTypes.map((type, index) => {
                 return (
-                  <option key={index}
+                  <option
+                    key={index}
                     className="type-letter-color"
                     style={{ backgroundColor: typeColors[type] }}
                     value={type}

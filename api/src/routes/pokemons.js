@@ -26,15 +26,26 @@ router.get("/:param", async (req, res, next) => {
       }
       return res.status(200).json(pokeFindDB);
     }
-    const pokeFind = await getPokemonsApi();
-    //Por una cuestion de JS, un str con un number es == parseInt(str)
+    const pokeFind = await getAllPokemons();
+
     if (param == parseInt(param)) {
       const pokemonInfo = pokeFind.filter((e) => e.id == param);
       return pokemonInfo.length
         ? res.status(200).json(pokemonInfo[0])
         : res.status(404).json("Id not found");
+    } else {
+      const pokemonInfo = pokeFind.filter(
+        (e) => e.name == param.toLowerCase()
+      ); return pokemonInfo.length
+      ? res.status(200).json(pokemonInfo[0])
+      : res.status(404).json("Name not found");
     }
-    const pokemonDbInfo = await getPokemonsDb();
+
+
+
+
+    
+/*     const pokemonDbInfo = await getPokemonsDb();
     const infoTotalPokemons = pokemonDbInfo.concat(pokeFind);
 
     const pokemonInfo = infoTotalPokemons.filter(
@@ -42,7 +53,7 @@ router.get("/:param", async (req, res, next) => {
     );
     return pokemonInfo.length
       ? res.status(200).json(pokemonInfo[0])
-      : res.status(404).json("Name not found");
+      : res.status(404).json("Name not found"); */
   } catch (e) {
     next(e);
   }

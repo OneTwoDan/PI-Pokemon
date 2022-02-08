@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/pagination.css";
+import loading from "../img/loading.gif";
 
 export default function Pagination({ pokemonPerPage, allPokemons, pagination }) {
   const pages = [];
@@ -9,8 +10,13 @@ export default function Pagination({ pokemonPerPage, allPokemons, pagination }) 
   }
   return (
     <div>
-      {pages.length <= 1 ? (
-        <h1 className="loading">Loading...</h1> //corregir esto
+      {pages.length <= 0 ? (
+        <div className="loading-screen">
+        <div className="loading-text">Loading...</div>
+        <div className="">
+          <img src={loading} alt="Loading" />
+        </div>
+      </div>
       ) : (
         <nav className="pagination">
           <ul className="pages">

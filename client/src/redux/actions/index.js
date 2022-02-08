@@ -35,6 +35,13 @@ export function orderByName(payload) {
   };
 }
 
+export function orderByAttack(payload){
+  return {
+    type: "ORDER_BY_ATTACK",
+    payload,
+  }
+}
+
 export function getPokemonsParams(payload) {
   return async function (dispatch) {
     try {
@@ -52,7 +59,7 @@ export function getPokemonsParams(payload) {
 }
 
 export function postPokemon(payload) {
-  return async function (dispatch) {
+  return async function () {
     const postResponse = await axios.post(
       "http://localhost:3001/pokemons",
       payload
@@ -71,13 +78,13 @@ export function getTypes() {
   };
 }
 
-export function getDetail(id) {
+export function getDetail(param) {
   return async function (dispatch) {
     try {
-      var responseDetail = await axios.get(
-        `http://localhost:3001/pokemons/${id}`
+      const responseDetail = await axios.get(
+        `http://localhost:3001/pokemons/${param}`
       );
-      console.log(responseDetail)
+      
       return dispatch({
         type: "GET_DETAILS",
         payload: responseDetail.data,

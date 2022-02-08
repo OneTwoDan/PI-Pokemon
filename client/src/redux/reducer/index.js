@@ -37,6 +37,7 @@ function rootReducer(state = initialState, action) {
         ...state,
         pokemons: OriginFiltered,
       };
+      
     case "ORDER_BY_NAME":
       const allPokemons3 = state.allPokemons;
       const sorted =
@@ -61,7 +62,21 @@ function rootReducer(state = initialState, action) {
             });
       return {
         ...state,
-        pokemons: sorted,
+        allPokemons: sorted,
+      };
+    case "ORDER_BY_ATTACK":
+      const allPokemons4 = state.allPokemons;
+      const sorted2 =
+        action.payload === "high"
+          ? allPokemons4.sort((a, b) => {
+              return b.attack - a.attack;
+            })
+          : allPokemons4.sort((a, b) => {
+              return a.attack - b.attack;
+            });
+      return {
+        ...state,
+        pokemons: sorted2,
       };
     case "GET_POKEMON_PARAM":
       return {
@@ -69,19 +84,19 @@ function rootReducer(state = initialState, action) {
         pokemons: [action.payload],
       };
     case "POST_POKEMON":
-        return {
-          ...state,
-        };
+      return {
+        ...state,
+      };
     case "GET_TYPES":
-        return {
-          ...state,
-          types: action.payload,
-        };
-      case "GET_DETAILS":
-        return {
-          ...state,
-          detail: action.payload,
-        }
+      return {
+        ...state,
+        types: action.payload,
+      };
+    case "GET_DETAILS":
+      return {
+        ...state,
+        detail: action.payload,
+      };
     default:
       return state;
   }

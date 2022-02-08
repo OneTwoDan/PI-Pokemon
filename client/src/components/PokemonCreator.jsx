@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { postPokemon, getTypes } from "../redux/actions";
-import "../css/card.css";
+/* import "../css/card.css"; */
+import "../css/pokemonCreator.css";
 
 export default function RecipeCreator() {
-  const dispatch = useDispatch();
   const types = useSelector((state) => state.types);
-  const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
 
-  const [input, setInput] = useState({
+  const initialValues = {
     name: "",
     hp: "",
     attack: "",
@@ -20,189 +20,222 @@ export default function RecipeCreator() {
     weight: "",
     img: "",
     type: [],
-  });
+  };
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
-  function handleChange(e) {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-    });
-    setErrors(
-      validateErrors({
-        ...input,
-        [e.target.name]: e.target.value,
-      })
-    );
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
-  function handleSelect(e) {
-    setInput({
-      ...input,
-      type: [...input.type, e.target.value],
-    });
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault(); // evita que la pagina se refresque
+    dispatch(postPokemon(formValues));
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
+  };
 
-  function handleDelete(e) {
-    setInput({
-      ...input,
-      type: input.type.filter((t) => e !== t),
+  const handleSelect = (e) => {
+    setFormValues({
+      ...formValues,
+      type: [e.target.value, ...formValues.type],
     });
-  }
+  };
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    alert("Pokemon Created");
-    dispatch(postPokemon(input));
-    setInput({
-      name: "",
-      hp: "",
-      attack: "",
-      defense: "",
-      speed: "",
-      height: "",
-      weight: "",
-      img: "",
-      type: [],
+/*   const handleDelete = (e) => {
+    setFormValues({
+      ...formValues,
+      type: formValues.type.filter((t) => t !== e),
     });
-  }
+  }; */
+
+  function handleDelete (e) {
+    setFormValues({
+      ...formValues,
+      type: formValues.type.filter((t) => t !== e),
+  })}
+
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+    }
+  }, [formErrors]);
 
   useEffect(() => {
     dispatch(getTypes());
   }, [dispatch]);
 
-  function validateErrors(input) {
-    var validIMG = /^(ftp|http|https):\/\/[^ "]+$/.test(input.image);
-    let errors = {};
+  const validate = (values) => {
+    const errors = {};
+    var validIMG = /^(ftp|http|https):\/\/[^ "]+$/.test(formValues.img);
 
-    if (!input.name) {
-      errors.name = "Each Pokemon must have a Name!";
-    } else if (!input.img || !validIMG) {
-      errors.img = "Image must have a valid Link.";
-    } else if (!input.hp) {
-      errors.img = "Image must have a valid Link.";
-    } else if (!input.attack) {
-      errors.attack = "The Pokemon needs this attribute";
-    } else if (!input.defense) {
-      errors.defense = "The Pokemon needs this attribute";
-    } else if (!input.speed) {
-      errors.speed = "The Pokemon needs this attribute";
+    if (!values.name) {
+      errors.name = "Name is required";
+    } else if (!isNaN(values.name) === true) {
+      errors.name = "Name can't be a number";
+    }
+    if (!values.hp) {
+      errors.hp = "HP is required";
+    } else if (values.hp < 0) {
+      errors.hp = "HP must be more than 0";
+    } else if (isNaN(values.hp) === true) {
+      errors.hp = "HP can't be a word";
+    }
+    if (!values.attack) {
+      errors.attack = "Attack is required";
+    } else if (values.attack < "0") {
+      errors.attack = "Attack must be more than 0";
+    } else if (isNaN(values.attack) === true) {
+      errors.attack = "Attack can't be a word";
+    }
+    if (!values.defense) {
+      errors.defense = "Defense is required";
+    } else if (values.defense < 0) {
+      errors.defense = "Defense must be more than 0";
+    } else if (isNaN(values.defense) === true) {
+      errors.defense = "Defense can't be a word";
+    }
+    if (!values.speed) {
+      errors.speed = "Speed is required";
+    } else if (values.speed < 0) {
+      errors.speed = "Speed must be more than 0";
+    } else if (isNaN(values.speed) === true) {
+      errors.speed = "Speed can't be a word";
+    }
+    if (!values.img) {
+      errors.img = "You should put the Pokemon image link here";
+    } else if (!validIMG) {
+      errors.img = "Image must have a valid Link";
     }
     return errors;
-  }
+  };
 
   return (
-    <div>
-      <Link to="/home">
-        <button>Go back</button>
-      </Link>
-      <h1>Create your own Pokemon!</h1>
-      <form
-        autocomplete="off"
-        id="form-create-pokemon"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div>
-          <label>Name: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.name}
-            name="name"
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        {errors.name && <p className="error">{errors.name}</p>}
-        <div>
-          <label>Health Points: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.hp}
-            name="hp"
-            onChange={handleChange}
-          />
-          {errors.hp && <p className="error">{errors.hp}</p>}
-        </div>
-        <div>
-          <label>Attack: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.attack}
-            name="attack"
-            onChange={handleChange}
-          />
-          {errors.attack && <p className="error">{errors.attack}</p>}
-        </div>
-        <div>
-          <label>Defense: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.defense}
-            name="defense"
-            onChange={handleChange}
-          />
-          {errors.defense && <p className="error">{errors.defense}</p>}
-        </div>
-        <div>
-          <label>Speed: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.speed}
-            name="speed"
-            onChange={handleChange}
-          />
-          {errors.speed && <p className="error">{errors.speed}</p>}
-        </div>
-        <div>
-          <label>Height: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.height}
-            name="height"
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Weight: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.weight}
-            name="weight"
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Image: </label>
-          <input
-            class="form__input"
-            type="text"
-            value={input.img}
-            name="img"
-            onChange={handleChange}
-            placeholder="Inserte un link"
-          />
-          {errors.img && <p className="error">{errors.img}</p>}
-        </div>
-        <div>
-          <label>Types: </label>
-          <select onChange={(e) => handleSelect(e)}>
-            {types?.map((t) => (
-              <option value={t.name}>{t.name}</option>
+    <div className="container">
+      <div>
+        <Link to="/home">
+          <button>Home</button>
+        </Link>
+      </div>
+      {Object.keys(formErrors).length === 0 && isSubmit ? (
+        <div className="ui message success">Pokemon Created successfully</div>
+      ) : (
+        <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
+      )}
+      <form onSubmit={handleSubmit}>
+        <h1>Create your Pokemon</h1>
+        <div className="ui divider"></div>
+        <div className="ui form">
+          <div className="field">
+            <label>Name: </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="name"
+              value={formValues.name}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.name}</p>
+          <div className="field">
+            <label>Health Points: </label>
+            <input
+              type="text"
+              name="hp"
+              placeholder="hp"
+              value={formValues.hp}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.hp}</p>
+          <div className="field">
+            <label>Attack: </label>
+            <input
+              type="text"
+              name="attack"
+              placeholder="attack"
+              value={formValues.attack}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.attack}</p>
+          <div className="field">
+            <label>Defense: </label>
+            <input
+              type="text"
+              name="defense"
+              placeholder="defense"
+              value={formValues.defense}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.defense}</p>
+          <div className="field">
+            <label>Speed: </label>
+            <input
+              type="text"
+              name="speed"
+              placeholder="speed"
+              value={formValues.speed}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.speed}</p>
+          <div className="field">
+            <label>Height: </label>
+            <input
+              type="text"
+              name="height"
+              placeholder="height"
+              value={formValues.height}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <div className="field">
+            <label>Weight: </label>
+            <input
+              type="text"
+              name="weight"
+              placeholder="weight"
+              value={formValues.weight}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <div className="field">
+            <label>Image Link: </label>
+            <input
+              type="text"
+              name="img"
+              placeholder="img"
+              value={formValues.img}
+              onChange={handleChange}
+              autocomplete="off"
+            />
+          </div>
+          <p>{formErrors.img}</p>
+          <div>
+            <label>Types: </label>
+            <select onChange={handleSelect}>
+              {types?.map((t) => (
+                <option value={t.name}>{t.name}</option>
+              ))}
+            </select>
+            {formValues.type.map((t) => (
+              <div>
+                <span>{t}</span>
+                <button onClick={()=>handleDelete(t)}>X</button>
+              </div>
             ))}
-          </select>
-
-          {input.type.map((t) => (
-            <div>
-              <span>{t}</span>
-              <button onClick={() => handleDelete(t)}>X</button>
-            </div>
-          ))}
-          <button type="submit">Create Pokemon</button>
+            <button className="submit-buttom">Create Pokemon</button>
+          </div>
         </div>
       </form>
     </div>
