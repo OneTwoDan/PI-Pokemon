@@ -1,7 +1,5 @@
 const { Router } = require("express");
 const {
-  getPokemonsApi,
-  getPokemonsDb,
   getAllPokemons,
 } = require("../aux_functions/pokemonFunctions");
 const { Pokemon, Type } = require("../db");
@@ -17,16 +15,15 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:param", async (req, res, next) => {
+  const pokeFind = await getAllPokemons();
   try {
     const param = req.params.param;
     if (param.includes("-")) {
-      const pokeFindDB = await Pokemon.findByPk(param);
-      if (pokeFindDB === null) {
-        return res.status(404).json("Id not found");
-      }
-      return res.status(200).json(pokeFindDB);
+      const pokemonInfo = pokeFind.filter((e) => e.id == param);
+      return pokemonInfo.length
+        ? res.status(200).json(pokemonInfo[0])
+        : res.status(404).json("Id not found");
     }
-    const pokeFind = await getAllPokemons();
 
     if (param == parseInt(param)) {
       const pokemonInfo = pokeFind.filter((e) => e.id == param);
@@ -40,20 +37,6 @@ router.get("/:param", async (req, res, next) => {
       ? res.status(200).json(pokemonInfo[0])
       : res.status(404).json("Name not found");
     }
-
-
-
-
-    
-/*     const pokemonDbInfo = await getPokemonsDb();
-    const infoTotalPokemons = pokemonDbInfo.concat(pokeFind);
-
-    const pokemonInfo = infoTotalPokemons.filter(
-      (e) => e.name == param.toLowerCase()
-    );
-    return pokemonInfo.length
-      ? res.status(200).json(pokemonInfo[0])
-      : res.status(404).json("Name not found"); */
   } catch (e) {
     next(e);
   }
@@ -97,7 +80,8 @@ router.post("/", async (req, res, next) => {
     newPokemon.addType(typesDb);
 
     /* return res.json(newPokemon, status); */
-    res.send("Pokemon successfully created");
+    return res.json(newPokemon)
+    /* res.send("Pokemon successfully created"); */
   } catch (e) {
     next(e);
   }

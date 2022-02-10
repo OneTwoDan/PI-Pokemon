@@ -7,6 +7,7 @@ import {
   filterPokemonsByOrigin,
   orderByName,
   orderByAttack,
+  cleanPokemons,
 } from "../redux/actions/index";
 import { Link } from "react-router-dom";
 import Card from "./Card";
@@ -46,6 +47,7 @@ export default function Home() {
 
   function handleClick(e) {
     e.preventDefault();
+    dispatch(cleanPokemons())
     dispatch(getPokemons());
   }
 
@@ -90,9 +92,7 @@ export default function Home() {
             <button className="buttons">Create Pokemon</button>
           </Link>
         </div>
-
         <SearchBar />
-
         <div className="buttom-refresh-position">
           <button
             className="buttons"
@@ -104,6 +104,7 @@ export default function Home() {
           </button>
         </div>
       </div>
+            <br />
 
       <div>
         <div className="container-filters">

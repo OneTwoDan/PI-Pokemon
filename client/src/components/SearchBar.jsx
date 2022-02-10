@@ -1,7 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getPokemonsParams } from "../redux/actions/index";
+import { getPokemonsParams, cleanPokemons } from "../redux/actions/index";
+import "../css/searchBar.css";
+import loading from "../img/loading.gif";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -13,19 +15,23 @@ export default function SearchBar() {
   }
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("name", name)
+    dispatch(cleanPokemons())
     const searchPokemon = getPokemonsParams(name)
     dispatch(searchPokemon);
+    setName("")
   }
 
   return (
     <div className="full-search-bar">
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Name or number of Pokemon"
         onChange={(e) => handleInputChange(e)}
+        value={name}
+        id="search-box"
+        autocomplete="off"
       />
-      <button type="submit" onClick={(e) => handleSubmit(e)}>
+      <button id="search-btn" type="submit" onClick={(e) => handleSubmit(e)}>
         Search
       </button>
     </div>

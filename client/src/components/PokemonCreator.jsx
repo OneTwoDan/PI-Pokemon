@@ -1,14 +1,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { postPokemon, getTypes } from "../redux/actions";
-/* import "../css/card.css"; */
 import "../css/pokemonCreator.css";
+import typeColors from "../helpers/arraysApp";
+import "../css/card.css";
 
 export default function RecipeCreator() {
   const types = useSelector((state) => state.types);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const initialValues = {
     name: "",
@@ -30,32 +32,56 @@ export default function RecipeCreator() {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // evita que la pagina se refresque
-    dispatch(postPokemon(formValues));
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
+    const errorsValidate = validate()
+    setFormErrors(errorsValidate);
+    if(Object.keys(errorsValidate).length === 0){
+      const postResponse = await postPokemon(formValues)();
+      console.log("postResponse", postResponse)
+      history.push(`/pokemons/${postResponse.id}`);
+    }
+/*     setIsSubmit(true);
+    setFormValues({
+      name: "",
+      hp: "",
+      attack: "",
+      defense: "",
+      speed: "",
+      height: "",
+      weight: "",
+      img: "",
+      type: [],
+    }) */
   };
 
   const handleSelect = (e) => {
+    if (!e.target.value) {
+      return
+    }
+    if (formValues.type.length === 2) {
+      alert("Solo se pueden ingresar dos tipos por Pokemon");
+      return;
+    }
     setFormValues({
       ...formValues,
-      type: [e.target.value, ...formValues.type],
+      type: [...formValues.type, e.target.value],
     });
   };
 
-/*   const handleDelete = (e) => {
+  /*   const handleDelete = (e) => {
     setFormValues({
       ...formValues,
       type: formValues.type.filter((t) => t !== e),
     });
   }; */
 
-  function handleDelete (e) {
+  function handleDelete(e) {
     setFormValues({
       ...formValues,
       type: formValues.type.filter((t) => t !== e),
-  })}
+    });
+  }
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -66,44 +92,44 @@ export default function RecipeCreator() {
     dispatch(getTypes());
   }, [dispatch]);
 
-  const validate = (values) => {
+  const validate = () => {
     const errors = {};
     var validIMG = /^(ftp|http|https):\/\/[^ "]+$/.test(formValues.img);
 
-    if (!values.name) {
+    if (!formValues.name) {
       errors.name = "Name is required";
-    } else if (!isNaN(values.name) === true) {
+    } else if (!isNaN(formValues.name) === true) {
       errors.name = "Name can't be a number";
     }
-    if (!values.hp) {
+    if (!formValues.hp) {
       errors.hp = "HP is required";
-    } else if (values.hp < 0) {
+    } else if (formValues.hp < 0) {
       errors.hp = "HP must be more than 0";
-    } else if (isNaN(values.hp) === true) {
+    } else if (isNaN(formValues.hp) === true) {
       errors.hp = "HP can't be a word";
     }
-    if (!values.attack) {
+    if (!formValues.attack) {
       errors.attack = "Attack is required";
-    } else if (values.attack < "0") {
+    } else if (formValues.attack < "0") {
       errors.attack = "Attack must be more than 0";
-    } else if (isNaN(values.attack) === true) {
+    } else if (isNaN(formValues.attack) === true) {
       errors.attack = "Attack can't be a word";
     }
-    if (!values.defense) {
+    if (!formValues.defense) {
       errors.defense = "Defense is required";
-    } else if (values.defense < 0) {
+    } else if (formValues.defense < 0) {
       errors.defense = "Defense must be more than 0";
-    } else if (isNaN(values.defense) === true) {
+    } else if (isNaN(formValues.defense) === true) {
       errors.defense = "Defense can't be a word";
     }
-    if (!values.speed) {
+    if (!formValues.speed) {
       errors.speed = "Speed is required";
-    } else if (values.speed < 0) {
+    } else if (formValues.speed < 0) {
       errors.speed = "Speed must be more than 0";
-    } else if (isNaN(values.speed) === true) {
+    } else if (isNaN(formValues.speed) === true) {
       errors.speed = "Speed can't be a word";
     }
-    if (!values.img) {
+    if (!formValues.img) {
       errors.img = "You should put the Pokemon image link here";
     } else if (!validIMG) {
       errors.img = "Image must have a valid Link";
@@ -120,11 +146,10 @@ export default function RecipeCreator() {
       </div>
       {Object.keys(formErrors).length === 0 && isSubmit ? (
         <div className="ui message success">Pokemon Created successfully</div>
-      ) : (
-        <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
-      )}
+      ) : 
+        
       <form onSubmit={handleSubmit}>
-        <h1>Create your Pokemon</h1>
+        <h1 className="title-form">Create your Pokemon</h1>
         <div className="ui divider"></div>
         <div className="ui form">
           <div className="field">
@@ -223,21 +248,30 @@ export default function RecipeCreator() {
           <p>{formErrors.img}</p>
           <div>
             <label>Types: </label>
-            <select onChange={handleSelect}>
+            <select className="types-selector" onChange={handleSelect}>
+              <option value="" selected="" disabled="">- - Select - -</option>
               {types?.map((t) => (
                 <option value={t.name}>{t.name}</option>
               ))}
             </select>
             {formValues.type.map((t) => (
-              <div>
-                <span>{t}</span>
-                <button onClick={()=>handleDelete(t)}>X</button>
+              <div className="display-types">
+                <div className="span-type">
+                  <span className="type-size" style={{ backgroundColor: typeColors[t] }}>{t}</span>
+                </div>
+                <div className="cancel-test">
+                  <span className="cancel-type" onClick={() => handleDelete(t)}>X</span>
+                </div>
               </div>
             ))}
-            <button className="submit-buttom">Create Pokemon</button>
+          </div>
+          <br />
+          <div className="submit-buttom">
+            <button className="btn-create-pokemon">Create Pokemon</button>
           </div>
         </div>
       </form>
+      }
     </div>
   );
 }

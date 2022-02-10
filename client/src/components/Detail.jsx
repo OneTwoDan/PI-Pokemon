@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getDetail } from "../redux/actions/index";
+import { getDetail, cleanDetails } from "../redux/actions/index";
 import { useEffect } from "react";
 import loading from "../img/loading.gif";
 import "../css/detail.css";
@@ -13,6 +13,12 @@ export default function Detail(props) {
   useEffect(() => {
     dispatch(getDetail(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanDetails());
+    };
+  },[id]);
 
   const pokemonDetails = useSelector((state) => state.detail);
 

@@ -37,7 +37,7 @@ function rootReducer(state = initialState, action) {
         ...state,
         pokemons: OriginFiltered,
       };
-      
+
     case "ORDER_BY_NAME":
       const allPokemons3 = state.allPokemons;
       const sorted =
@@ -97,6 +97,17 @@ function rootReducer(state = initialState, action) {
         ...state,
         detail: action.payload,
       };
+    case "CLEAN_POKEMONS":
+      return {
+        ...state,
+        pokemons: action.payload,
+        allPokemons: action.payload,
+      };
+      case "CLEAN_DETAILS":
+        return {
+          ...state,
+          detail: action.payload,
+        };
     default:
       return state;
   }

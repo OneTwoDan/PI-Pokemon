@@ -64,7 +64,7 @@ export function postPokemon(payload) {
       "http://localhost:3001/pokemons",
       payload
     );
-    return postResponse;
+    return postResponse.data;
   };
 }
 
@@ -93,4 +93,18 @@ export function getDetail(param) {
       console.log(e);
     }
   };
+}
+
+export function cleanPokemons(){
+  return ({
+    type: "CLEAN_POKEMONS",
+    payload: []
+  })
+}
+
+export function cleanDetails(){
+  return ({
+    type: "CLEAN_DETAILS",
+    payload: null
+  })
 }
