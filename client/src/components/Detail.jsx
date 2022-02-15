@@ -10,15 +10,13 @@ import typeColors from "../helpers/arraysApp";
 export default function Detail(props) {
   const dispatch = useDispatch();
   const id = props.match.params.id;
+  
   useEffect(() => {
     dispatch(getDetail(id));
-  }, [dispatch, id]);
-
-  useEffect(() => {
     return () => {
       dispatch(cleanDetails());
     };
-  },[id]);
+  }, [dispatch, id]);
 
   const pokemonDetails = useSelector((state) => state.detail);
 

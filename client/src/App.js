@@ -4,6 +4,7 @@ import LandingPage from "./components/LandingPage";
 import Home from "./components/Home";
 import Detail from "./components/Detail";
 import PokemonCreator from "./components/PokemonCreator";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -11,10 +12,10 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={LandingPage} />
-
           <Route path="/home" component={Home} />
           <Route path="/pokemons/:id" component={Detail} />
           <Route path="/pokemoncreator" component={PokemonCreator} />
+          <Route path="" component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>

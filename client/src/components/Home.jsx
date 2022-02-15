@@ -22,17 +22,17 @@ export default function Home() {
   const dispatch = useDispatch();
   const allPokemons = useSelector((state) => state.pokemons);
 
-  const [order, setOrder] = useState(""); //
+  const [, setOrder] = useState(""); 
 
   const [currentPage, setCurrentPage] = useState(1);
   //
-  const [pokemonPerPage /* setRecipesPerPage */] = useState(12);
+  const pokemonPerPage = 12
   //             24               2              12
   const indexOfLastPokemon = currentPage * pokemonPerPage; //12
   //            12                      24              12
   const indexOfFirstPokemon = indexOfLastPokemon - pokemonPerPage;
 
-  const currentPokemon = allPokemons.slice(
+  const currentPokemon = (allPokemons || []).slice(
     indexOfFirstPokemon, // 12
     indexOfLastPokemon // 24
   );
@@ -64,7 +64,6 @@ export default function Home() {
     dispatch(orderByName(e.target.value));
     setCurrentPage(1);
     setOrder(`Ordenado${e.target.value}`);
-    console.log(e);
   }
 
   function handleSortAttack(e) {
@@ -154,7 +153,7 @@ export default function Home() {
       <div className="pagination-size">
         <Pagination
           pokemonPerPage={pokemonPerPage}
-          allPokemons={allPokemons.length}
+          allPokemonsQuanty={allPokemons?.length}
           pagination={pagination}
         />
       </div>

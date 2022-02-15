@@ -22,20 +22,20 @@ router.get("/:param", async (req, res, next) => {
       const pokemonInfo = pokeFind.filter((e) => e.id == param);
       return pokemonInfo.length
         ? res.status(200).json(pokemonInfo[0])
-        : res.status(404).json("Id not found");
+        : res.status(200).json(null);
     }
 
     if (param == parseInt(param)) {
       const pokemonInfo = pokeFind.filter((e) => e.id == param);
       return pokemonInfo.length
         ? res.status(200).json(pokemonInfo[0])
-        : res.status(404).json("Id not found");
+        : res.status(200).json(null);
     } else {
       const pokemonInfo = pokeFind.filter(
         (e) => e.name == param.toLowerCase()
       ); return pokemonInfo.length
       ? res.status(200).json(pokemonInfo[0])
-      : res.status(404).json("Name not found");
+      : res.status(200).json(null);
     }
   } catch (e) {
     next(e);

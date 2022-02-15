@@ -44,11 +44,13 @@ export function orderByAttack(payload){
 
 export function getPokemonsParams(payload) {
   return async function (dispatch) {
+    
     try {
       const responseParam = await axios.get(
-        `http://localhost:3001/pokemons/${payload}`
-      );      
-      return dispatch({
+        `http://localhost:3001/pokemons/${payload}`        
+      )
+      console.log(responseParam);      
+      return dispatch({       
         type: "GET_POKEMON_PARAM",
         payload: responseParam.data,
       });     
@@ -98,7 +100,7 @@ export function getDetail(param) {
 export function cleanPokemons(){
   return ({
     type: "CLEAN_POKEMONS",
-    payload: []
+    payload: null
   })
 }
 

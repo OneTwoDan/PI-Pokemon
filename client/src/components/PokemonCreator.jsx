@@ -25,7 +25,6 @@ export default function RecipeCreator() {
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,31 +32,18 @@ export default function RecipeCreator() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // evita que la pagina se refresque
-    const errorsValidate = validate()
+    e.preventDefault();
+    const errorsValidate = validate();
     setFormErrors(errorsValidate);
-    if(Object.keys(errorsValidate).length === 0){
+    if (Object.keys(errorsValidate).length === 0) {
       const postResponse = await postPokemon(formValues)();
-      console.log("postResponse", postResponse)
       history.push(`/pokemons/${postResponse.id}`);
     }
-/*     setIsSubmit(true);
-    setFormValues({
-      name: "",
-      hp: "",
-      attack: "",
-      defense: "",
-      speed: "",
-      height: "",
-      weight: "",
-      img: "",
-      type: [],
-    }) */
   };
 
   const handleSelect = (e) => {
     if (!e.target.value) {
-      return
+      return;
     }
     if (formValues.type.length === 2) {
       alert("Solo se pueden ingresar dos tipos por Pokemon");
@@ -69,24 +55,12 @@ export default function RecipeCreator() {
     });
   };
 
-  /*   const handleDelete = (e) => {
-    setFormValues({
-      ...formValues,
-      type: formValues.type.filter((t) => t !== e),
-    });
-  }; */
-
   function handleDelete(e) {
     setFormValues({
       ...formValues,
       type: formValues.type.filter((t) => t !== e),
     });
   }
-
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-    }
-  }, [formErrors]);
 
   useEffect(() => {
     dispatch(getTypes());
@@ -134,6 +108,9 @@ export default function RecipeCreator() {
     } else if (!validIMG) {
       errors.img = "Image must have a valid Link";
     }
+    if (!formValues.type.length) {
+      errors.type = "You need select at least 1 type";
+    }
     return errors;
   };
 
@@ -144,10 +121,7 @@ export default function RecipeCreator() {
           <button>Home</button>
         </Link>
       </div>
-      {Object.keys(formErrors).length === 0 && isSubmit ? (
-        <div className="ui message success">Pokemon Created successfully</div>
-      ) : 
-        
+
       <form onSubmit={handleSubmit}>
         <h1 className="title-form">Create your Pokemon</h1>
         <div className="ui divider"></div>
@@ -160,7 +134,7 @@ export default function RecipeCreator() {
               placeholder="name"
               value={formValues.name}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.name}</p>
@@ -172,7 +146,7 @@ export default function RecipeCreator() {
               placeholder="hp"
               value={formValues.hp}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.hp}</p>
@@ -184,7 +158,7 @@ export default function RecipeCreator() {
               placeholder="attack"
               value={formValues.attack}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.attack}</p>
@@ -196,7 +170,7 @@ export default function RecipeCreator() {
               placeholder="defense"
               value={formValues.defense}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.defense}</p>
@@ -208,7 +182,7 @@ export default function RecipeCreator() {
               placeholder="speed"
               value={formValues.speed}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.speed}</p>
@@ -220,7 +194,7 @@ export default function RecipeCreator() {
               placeholder="height"
               value={formValues.height}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <div className="field">
@@ -231,7 +205,7 @@ export default function RecipeCreator() {
               placeholder="weight"
               value={formValues.weight}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <div className="field">
@@ -242,36 +216,47 @@ export default function RecipeCreator() {
               placeholder="img"
               value={formValues.img}
               onChange={handleChange}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <p>{formErrors.img}</p>
           <div>
             <label>Types: </label>
             <select className="types-selector" onChange={handleSelect}>
-              <option value="" selected="" disabled="">- - Select - -</option>
+              <option value="" disabled="">
+                - - Select - -
+              </option>
               {types?.map((t) => (
                 <option value={t.name}>{t.name}</option>
               ))}
             </select>
+
             {formValues.type.map((t) => (
               <div className="display-types">
                 <div className="span-type">
-                  <span className="type-size" style={{ backgroundColor: typeColors[t] }}>{t}</span>
+                  <span
+                    className="type-size"
+                    style={{ backgroundColor: typeColors[t] }}
+                  >
+                    {t}
+                  </span>
                 </div>
+
                 <div className="cancel-test">
-                  <span className="cancel-type" onClick={() => handleDelete(t)}>X</span>
+                  <span className="cancel-type" onClick={() => handleDelete(t)}>
+                    X
+                  </span>
                 </div>
               </div>
             ))}
           </div>
+          <p>{formErrors.type}</p>
           <br />
           <div className="submit-buttom">
             <button className="btn-create-pokemon">Create Pokemon</button>
           </div>
         </div>
       </form>
-      }
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPokemonsParams, cleanPokemons } from "../redux/actions/index";
 import "../css/searchBar.css";
-import loading from "../img/loading.gif";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function SearchBar() {
         onChange={(e) => handleInputChange(e)}
         value={name}
         id="search-box"
-        autocomplete="off"
+        autoComplete="off"
       />
       <button id="search-btn" type="submit" onClick={(e) => handleSubmit(e)}>
         Search

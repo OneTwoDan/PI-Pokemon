@@ -1,0 +1,10 @@
+.red-error{
+    background-color: #dc3545;
+    transition: all 0.3s;
+}
+
+.red-error:hover {
+    background: red;
+    box-shadow: 0 0 10px red, 0 0 40px red, 0 0 80px red;
+    transition-delay: 1s;
+  }
