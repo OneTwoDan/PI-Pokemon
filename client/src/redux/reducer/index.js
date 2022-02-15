@@ -78,7 +78,7 @@ function rootReducer(state = initialState, action) {
         ...state,
         pokemons: sorted2,
       };
-    case "GET_POKEMON_PARAM":      
+    case "GET_POKEMON_NAME":      
       return {
         ...state,
         pokemons: action.payload? [action.payload]: [],

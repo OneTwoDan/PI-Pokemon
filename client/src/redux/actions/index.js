@@ -42,17 +42,15 @@ export function orderByAttack(payload){
   }
 }
 
-export function getPokemonsParams(payload) {
+export function getPokemonByName(payload) {
   return async function (dispatch) {
-    
     try {
-      const responseParam = await axios.get(
-        `http://localhost:3001/pokemons/${payload}`        
-      )
-      console.log(responseParam);      
+      const responseName = await axios.get(
+        `http://localhost:3001/pokemons?name=${payload}`        
+      )    
       return dispatch({       
-        type: "GET_POKEMON_PARAM",
-        payload: responseParam.data,
+        type: "GET_POKEMON_NAME",
+        payload: responseName.data,
       });     
     } catch (e) {
         console.log(e);

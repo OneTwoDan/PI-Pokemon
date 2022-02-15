@@ -46,7 +46,7 @@ export default function RecipeCreator() {
       return;
     }
     if (formValues.type.length === 2) {
-      alert("Solo se pueden ingresar dos tipos por Pokemon");
+      alert("You can only choose max 2 types per Pokemon");
       return;
     }
     setFormValues({
