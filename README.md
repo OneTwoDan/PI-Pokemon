@@ -6,8 +6,6 @@ Este proyecto es una aplicación que se conecta a la API de Pokémon para mostra
 
 Puedes ver una demostración del funcionamiento del proyecto en LinkedIn. [Haz clic aquí para ver el proyecto en LinkedIn](https://www.linkedin.com/posts/daniel-londono-agudelo_redux-react-css-activity-6900592647971713024-_oJT?utm_source=share&utm_medium=member_desktop).
 
-Puedes ver una demostración del funcionamiento del proyecto en LinkedIn. <a href="https://www.linkedin.com/in/usuario/proyecto" target="_blank">Haz clic aquí para ver el proyecto en LinkedIn</a>.
-
 ## Características
 
 - Busca información sobre Pokémon usando la API de Pokémon.
